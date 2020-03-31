@@ -1,0 +1,67 @@
+$white:    #fff !default;
+$black:    #000 !default;
+
+$blue:      #007bff !default;
+$indigo:    #6610f2 !default;
+$purple:    #6f42c1 !default;
+$pink:      #e83e8c !default;
+$red:       #dc3545 !default;
+$orange:    #fd7e14 !default;
+$yellow:    #ffc107 !default;
+$green:     #28a745 !default;
+$teal:      #20c997 !default;
+$cyan:      #17a2b8 !default;
+$gray:      #BAB1AD !default;
+$gray-dark: #403734 !default;
+
+$color-variants: (
+    100:  -10%,
+    200:  -25%,
+    300:  -50%,
+    400:  -75%,
+    500:  100%,
+    600:   75%,
+    700:   50%,
+    800:   25%,
+    900:   15%
+);
+
+$colors: () !default;
+$colors: map-merge((
+  "blue":       $blue,
+  "indigo":     $indigo,
+  "purple":     $purple,
+  "pink":       $pink,
+  "red":        $red,
+  "orange":     $orange,
+  "yellow":     $yellow,
+  "green":      $green,
+  "teal":       $teal,
+  "cyan":       $cyan,
+  "white":      $white,
+  "gray":       $gray,
+  "gray-dark":  $gray-dark
+), $colors);
+
+@each $color-name, $color in $colors {       
+    @each $variant-name, $percent in $color-variants {
+        $mix-color: if($percent < 0%, white, black);
+        $colors: map-merge($colors, ($color-name+'-'+$variant-name: mix($color, $mix-color, abs($percent))));
+    }
+}
+
+$gray-100: map-get($colors, gray-100);
+$gray-200: map-get($colors, gray-200);
+$gray-300: map-get($colors, gray-300);
+$gray-400: map-get($colors, gray-400);
+$gray-500: map-get($colors, gray-500);
+$gray-600: map-get($colors, gray-600);
+$gray-700: map-get($colors, gray-700);
+$gray-800: map-get($colors, gray-800);
+$gray-900: map-get($colors, gray-900);
+
+$enable-hover-media-query: true;
+
+$section-color: map-get($colors, green-100);
+
+$section-border-color: map-get($colors, gray-700);

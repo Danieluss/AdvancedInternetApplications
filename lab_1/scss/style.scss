@@ -1,0 +1,28 @@
+@import 'theme/theme', 'grid/grid';
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: $footer-size;
+}
+
+body {
+    font-family: Ubuntu, sans-serif;
+}
+    
+@include apply-to-md {
+    .menu {
+        width: 20%;
+    }
+}
+
+@include apply-to-sm {
+    .menu {
+        width: 20%;
+    }
+}
