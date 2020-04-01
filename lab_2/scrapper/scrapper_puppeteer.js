@@ -1,6 +1,3 @@
-const jsdom = require('jsdom')
-const jQuery = require('jquery');
-const { JSDOM } = jsdom;
 const Puppeteer = require('puppeteer')
 const Money = require('money');
 const PromisePool = require('es6-promise-pool');
@@ -18,7 +15,7 @@ parser.addArgument(
     [ '-c', '--concurrency' ],
     {
         help: 'PromisePool concurrency',
-        defaultValue: 32
+        defaultValue: 16
     }
 );
 parser.addArgument(
@@ -56,21 +53,18 @@ function url(page) {
     return `https://www.otomoto.pl/osobowe/od-2000/?page=${page}&search%5Bfilter_float_price%3Afrom%5D=5000&search%5Bfilter_float_price%3Ato%5D=30000&search%5Bfilter_enum_has_vin%5D=1&search%5Bfilter_float_mileage%3Ato%5D=200000&search%5Bfilter_float_engine_power%3Afrom%5D=110&search%5Bfilter_enum_gearbox%5D%5B0%5D=manual&search%5Bfilter_enum_gearbox%5D%5B1%5D=manual-sequential&search%5Bfilter_enum_damaged%5D=0&search%5Bfilter_enum_no_accident%5D=1&search%5Border%5D=created_at%3Adesc&search%5Bbrand_program_id%5D%5B0%5D=&search%5Bcountry%5D=`
 }
 
-function promiseDOM(url) {
-    return new Promise(function (resolve, reject) {
-        JSDOM.fromURL(url).then(dom => {
-            var $ = jQuery(dom.window);
-            resolve($);
-        });
-    });
-}
-
 async function run() {
+    const browser = await Puppeteer.launch();
+    const page = await newPage();
 
-    var noResults = await promiseDOM(url(1)).then(($) => {
-        return Number($('.om-pager li:nth-last-child(2) a .page')[0].innerHTML);
-    })
-    
+    await page.goto(url(1));
+    await page.addScriptTag({ url: 'https://code.jquery.com/jquery-3.4.1.min.js' });
+    const noResults = await page.evaluate(() => {
+       const $ = window.$;
+       return Number($('.om-pager li:nth-last-child(2) a .page')[0].innerText);
+   });
+    page.close();
+   
     var pageUrls = [...Array(noResults).keys()].map((k) => url(k + 1));
 
     var accData = [];
@@ -93,6 +87,7 @@ async function run() {
     });
 
     console.log(accData.slice(0, 10));
+    await browser.close();
 
     var stream = FileSystem.createWriteStream("output.json");
     stream.once('open', function(fd) {
@@ -100,8 +95,26 @@ async function run() {
         stream.end();
     });
 
+    async function newPage() {
+        var page = await browser.newPage();
+  
+        await page.setRequestInterception(true);
+        // keep scripts so that content is rendered properly
+        page.on('request', (request) => {
+            if (['image', 'stylesheet', 'font'].indexOf(request.resourceType()) !== -1) {
+                request.abort();
+            } else {
+                request.continue();
+            }
+        });
+
+        return page;
+    }
+
     async function scrap(url) {
+        const page = await newPage();
         const data = await visit(url);
+        await page.close();
 
         data.name.forEach((name, i) => {
             if(data.currency[i] !== 'PLN')
@@ -121,7 +134,11 @@ async function run() {
         progressBar.addTick();
     
         async function visit(url) {
-            return await promiseDOM(url).then(($) => {
+            await page.goto(url);
+            await page.addScriptTag({ url: 'https://code.jquery.com/jquery-3.4.1.min.js' });
+    
+            return await page.evaluate(() => {
+                const $ = window.$;
                 const numberRegex = /(\d+)/g;
                 var data = {};
     
@@ -131,7 +148,7 @@ async function run() {
     
                 function getNumber(selector) {
                     return get(selector, (element) => {
-                        text = element.innerHTML;
+                        text = element.innerText;
                         return Number(text.match(numberRegex).join(''));
                     });
                 }
@@ -142,10 +159,10 @@ async function run() {
                 data.mileage = getNumber('li.ds-param[data-code="mileage"] span');
                 data.price = getNumber('span.offer-price__number span:first-child()');
                 data.currency = get('span.offer-price__number span:nth-child(2)', (element) => {
-                    return element.innerHTML;
+                    return element.innerText;
                 });
                 data.age = get('li.ds-param[data-code="year"] span', (element) => {
-                    text = element.innerHTML;
+                    text = element.innerText;
                     return number = 2020 - Number(text);
                 });
                 data.url = get('a.offer-title__link', (element) => {
@@ -153,7 +170,7 @@ async function run() {
                 });
     
                 return data;
-            })
+            });
         }
     };
 }

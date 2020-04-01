@@ -20,3 +20,19 @@ Optional arguments:
                         Price cost
   -a AGE, --age AGE     Age cost
 ```
+
+
+```
+time node scrapper.js
+--
+real    1m9,547s
+user    1m33,418s
+sys     0m1,364s
+```
+```
+time node scrapper_puppeteeer.js
+--
+real    3m3,077s
+user    2m27,200s
+sys     0m35,919s
+```
