@@ -1,6 +1,10 @@
 ```
-node scrapper.js -h
-
+npm install
+```
+```
+node scrapper.js
+```
+```
 usage: scrapper.js [-h] [-v] [-c CONCURRENCY] [-m MILEAGE] [-p PRICE] [-a AGE]
 
 Argparse example
