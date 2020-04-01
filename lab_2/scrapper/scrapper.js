@@ -89,7 +89,7 @@ async function run() {
     console.log(accData.slice(0, 10));
     await browser.close();
 
-    var stream = FileSystem.createWriteStream("output.txt");
+    var stream = FileSystem.createWriteStream("output.json");
     stream.once('open', function(fd) {
         stream.write(JSON.stringify(accData, null, 2));
         stream.end();
