@@ -12,14 +12,38 @@ var parser = new ArgumentParser({
   description: 'Argparse example'
 });
 parser.addArgument(
-  [ '-c', '--concurrency' ],
-  {
-    help: 'PromisePool concurrency',
-    defaultValue: 32
-  }
+    [ '-c', '--concurrency' ],
+    {
+        help: 'PromisePool concurrency',
+        defaultValue: 32
+    }
+);
+parser.addArgument(
+    [ '-m', '--mileage' ],
+    {
+        help: 'Mileage cost',
+        defaultValue: 2
+    }
+);
+parser.addArgument(
+    [ '-p', '--price' ],
+    {
+        help: 'Price cost',
+        defaultValue: 2
+    }
+);
+parser.addArgument(
+    [ '-a', '--age' ],
+    {
+        help: 'Age cost',
+        defaultValue: 0.5
+    }
 );
 var args = parser.parseArgs();
 
+const mileageCost = Number(args.mileage);
+const priceCost = Number(args.price);
+const ageCost = Number(args.age);
 const CONCURRENCY = Number(args.concurrency);
 
 function url(page) {
@@ -44,10 +68,6 @@ async function run() {
     var pageUrls = [...Array(noResults).keys()].map((k) => url(k + 1));
 
     var accData = [];
-
-    const mileageCost = 2;
-    const priceCost = 2;
-    const ageCost = 0.5;
 
     const progressBar = ProgressBar.create().step('Scrapping the web');
     progressBar.setTotal(noResults);
