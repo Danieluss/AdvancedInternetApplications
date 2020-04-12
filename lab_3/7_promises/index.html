@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="utf-8" />
+ <script type="text/javascript"
+src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+ <style>
+    a { margin: 10px; }
+    #content { border: 1px solid black; padding: 20px; width: 50%; }
+ </style>
+ <script type="text/javascript" src="index.js"></script>
+ <script type="text/javascript">
+    $(function () {
+        $('a').click(function () {
+                $('#content').animate({height: '0px', width: '0px'}, () => {
+                    request($(this).attr('href')).then((response) => {
+                        $('#content').html(response);
+                        $('#content').animate({ height: '500px', width: '500px'});
+                });
+            });
+            return false;
+        });
+    });
+ </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../1_selectors/selectors.html">Page 1</a>
+            <a href="../2_styles/styles.html">Page 2</a>
+            <a href="../3_events/events.html">Page 3</a>
+            <a href="http://www.google.com">google.com</a>
+        </nav>
+    </header>
+    <div id="content"></div>
+</body>
+</html>
