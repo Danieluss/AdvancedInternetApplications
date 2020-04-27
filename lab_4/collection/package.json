@@ -15,8 +15,13 @@
     "node-sass": "^4.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-images-upload": "^1.2.8",
+    "react-images-uploading": "^2.1.1",
     "react-router-dom": "latest",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "react-star-rating-input": "^8.0.1",
+    "react-toast-notifications": "^2.4.0",
+    "react-toastify": "^5.5.0"
   },
   "scripts": {
     "start": "react-scripts start",

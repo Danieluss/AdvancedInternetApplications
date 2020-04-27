@@ -32,8 +32,6 @@ export default class List extends Component {
         this.changeState((state) => {
             if (state.sort === crit) {
                 state.sort = crit + "-down";
-            } else if (state.sort === crit + "-down") {
-                state.sort = undefined;
             } else {
                 state.sort = crit;
             }
@@ -72,7 +70,7 @@ export default class List extends Component {
         }
         return keyVals.map((keyVal, _) =>
             (
-                <MDBCol sm={12} md={6} lg={4} className="mb-3 mb-md-4 pr-0 pl-0">
+                <MDBCol key={_} sm={"12"} md={"6"} lg={"4"} className="mb-3 mb-md-4 pr-0 pl-0">
                     <Item remove={() => {
                             this.remove(keyVal.key)
                         }} update={(rating) => {
@@ -90,12 +88,18 @@ export default class List extends Component {
         });
     }
 
+    add(item) {
+        this.changeState((state) => {
+            state.data.push(item);
+        });
+    }
+
     render() {
 
         return (
             <MDBContainer className="list pt-3 pt-lg-5 gray z-depth-1">
                 <MDBRow className="list-options sticky-top">
-                    <Options sort={this.sort.bind(this)} search={this.search.bind(this)}/>
+                    <Options add={this.add.bind(this)} sort={this.sort.bind(this)} search={this.search.bind(this)}/>
                 </MDBRow>
                 <MDBRow className="list-items">
                     {

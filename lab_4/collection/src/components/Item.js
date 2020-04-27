@@ -61,6 +61,10 @@ export default class Item extends Component{
         }
     }
 
+    getImg() {
+        return this.state.data.img !== "default" ? this.state.data.img : img;
+    }
+
     render() {
         let that = this;
         return (
@@ -71,7 +75,7 @@ export default class Item extends Component{
                     </div>
                     <div className="text-right rating">
                         {this.state.rating_colors.map(function (x, i) {
-                            return <span onClick={(e) => {
+                            return <span key={i} onClick={(e) => {
                                             that.toggleEdition(i);
                                         }}
                                         onMouseEnter={(e) => {
@@ -84,7 +88,7 @@ export default class Item extends Component{
                     </div>
                 </h5>
                 <div className="p-2">
-                    <img className="m-2 item-image img-thumbnail img-fluid darken-1" src={img}>
+                    <img className="m-2 item-image img-thumbnail img-fluid darken-1" src={this.getImg()}>
                     </img>
                     <span className="">
                         {this.getDescription()}

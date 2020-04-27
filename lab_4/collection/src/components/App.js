@@ -16,7 +16,7 @@ function App() {
                     <strong className="white-text">Bananas Go</strong>
                 </MDBNavbarBrand>
             </MDBNavbar>
-            <MDBContainer fluid="md">
+            <MDBContainer fluid={true}>
                 <MDBRow className="list-row ml-2 mr-2 mt-0">
                     <List data={data}></List>
                 </MDBRow>
