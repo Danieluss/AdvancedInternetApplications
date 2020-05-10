@@ -1,12 +1,14 @@
 # lab5
+![first](https://github.com/Danieluss/AdvancedInternetApplications/blob/master/lab_5/lab_5_1.png "Shop view")
+![second](https://github.com/Danieluss/AdvancedInternetApplications/blob/master/lab_5/lab_5_2.png "Cart view")
 
 ### Build & run
-####[1] docker-compose
+#### docker-compose
 ```
 docker-compose build
 docker-compose up
 ```
-####[2] without docker-compose
+#### without docker-compose
 You need mongodb `3.6+` running locally at `27017`.
 
 ```
