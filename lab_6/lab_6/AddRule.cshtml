@@ -1,0 +1,7 @@
+﻿@{
+    if(Session["rules"] == null) {
+        Session["rules"] = new List<string>();
+    }
+    ((List<String>) Session["rules"]).Add(Request.Form["rule"]);
+    Response.Redirect("Rules.cshtml");
+}

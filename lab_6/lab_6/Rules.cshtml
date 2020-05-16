@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    @{ 
+        var list = (List<String>)Session["rules"];
+        if (list != null) {
+            foreach (var rule in list) {
+            @rule
+            <br />
+            }
+
+        }
+    }
+    <form action="~/AddRule.cshtml" method="post">
+        <input type="text" value="bla bla" id="rule" name="rule" />
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+</html>
